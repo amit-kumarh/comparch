@@ -8,7 +8,6 @@ module fade #(
     parameter STEP_SIZE = PWM_INTERVAL / STEP_MAX,
     parameter INITIAL_STATE = 0,
     parameter INITIAL_STEP_COUNT = 0,
-    // Start high unless told otherwise so we can use local parameters
     parameter INITIAL_DUTY_CYCLE = 0
 ) (
     input logic clk,
