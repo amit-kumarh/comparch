@@ -23,7 +23,7 @@ module sine_tb;
   initial begin
     $dumpfile("sine.vcd");
     $dumpvars(0, sine_tb);
-    #10000 $finish;
+    #30000 $finish;
   end
 
   always begin

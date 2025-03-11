@@ -16,18 +16,15 @@ module fsm #(
     SINE_4
   } state_t;
 
-  logic [1:0] current_state;
-  logic [1:0] next_state;
-  logic [6:0] addr;
-  logic [9:0] mem_out;
-  logic [6:0] counter;
-  logic time_to_change;
+  state_t current_state, next_state;
+  logic [6:0] addr, next_addr;
+  logic [6:0] counter, next_counter;
+  logic [8:0] mem_out;
 
   initial begin
     current_state = SINE_1;
     addr = 0;
     counter = 0;
-    time_to_change = 0;
   end
 
   memory #(
@@ -39,62 +36,54 @@ module fsm #(
   );
 
   always_ff @(posedge clk) begin
-    // advance the memory address
-    case (current_state)
-      SINE_1: begin
-        out  <= mem_out;
-        addr <= addr + 1;
-      end
-      SINE_2: begin
-        out  <= mem_out;
-        addr <= addr - 1;
-      end
-      SINE_3: begin
-        out  <= 1024 - mem_out;
-        addr <= addr + 1;
-      end
-      SINE_4: begin
-        out  <= 1024 - mem_out;
-        addr <= addr - 1;
-      end
-      default: begin
-        out  <= 0;
-        addr <= 0;
-      end
-    endcase
-
+    current_state <= next_state;
+    addr <= next_addr;
     counter <= counter + 1;
-    if (counter == MEM_SIZE - 2) begin
-      time_to_change <= 1;
+  end
+
+  always_comb begin
+    next_state = current_state;
+    next_addr = addr;
+    next_counter = counter + 1;
+
+    if (counter == MEM_SIZE - 1) begin
+      next_counter = 0;
+      case (current_state)
+        SINE_1: begin
+          next_state = SINE_2;
+          next_addr  = MEM_SIZE - 1;
+        end
+        SINE_2: begin
+          next_state = SINE_3;
+          next_addr  = 0;
+        end
+        SINE_3: begin
+          next_state = SINE_4;
+          next_addr  = MEM_SIZE - 1;
+        end
+        SINE_4: begin
+          next_state = SINE_1;
+          next_addr  = 0;
+        end
+        default: begin
+          next_state = SINE_1;
+          next_addr  = 0;
+        end
+      endcase
+    end else begin
+      case (current_state)
+        SINE_1, SINE_3: next_addr = addr + 1;
+        SINE_2, SINE_4: next_addr = addr - 1;
+        default: next_addr = 0;
+      endcase
     end
   end
 
   always_ff @(posedge clk) begin
-    if (time_to_change == 1) begin
-      case (current_state)
-        SINE_1: begin
-          current_state <= 2'b01;
-          addr <= MEM_SIZE - 1;
-          time_to_change <= 0;
-        end
-        SINE_2: begin
-          current_state <= 2'b10;
-          addr <= 0;
-          time_to_change <= 0;
-        end
-        SINE_3: begin
-          current_state <= 2'b11;
-          addr <= MEM_SIZE - 1;
-          time_to_change <= 0;
-        end
-        default: begin
-          current_state <= 2'b00;
-          addr <= 0;
-          time_to_change <= 0;
-        end
-      endcase
-
-      time_to_change <= 0;
-    end
+    case (current_state)
+      SINE_1, SINE_2: out <= mem_out + 512;
+      SINE_3, SINE_4: out <= 512 - mem_out;
+      default: out <= 0;
+    endcase
   end
 endmodule
