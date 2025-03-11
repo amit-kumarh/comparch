@@ -1,0 +1,43 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Tue Mar 11 15:38:56 2025
+[*]
+[dumpfile] "/home/amit/Documents/CompArch/comparch/mp3/sine.vcd"
+[dumpfile_mtime] "Tue Mar 11 15:38:06 2025"
+[dumpfile_size] 135307
+[savefile] "/home/amit/Documents/CompArch/comparch/mp3/wavegen.gtkw"
+[timestart] 720
+[size] 1916 1002
+[pos] -966 -6
+*-11.700001 10280 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] sine_tb.
+[treeopen] sine_tb.u0.
+[treeopen] sine_tb.u0.wavegen.
+[sst_width] 297
+[signals_width] 253
+[sst_expanded] 1
+[sst_vpaned_height] 306
+@28
+sine_tb.u0.wavegen.current_state[1:0]
+@8024
+sine_tb.u0.wavegen.addr[6:0]
+@10022
+sine_tb.u0.data[9:0]
+@20000
+-
+-
+@28
+sine_tb.u0._9b
+sine_tb.u0._6a
+sine_tb.u0._4a
+sine_tb.u0._2a
+sine_tb.u0._0a
+sine_tb.u0._5a
+sine_tb.u0._3b
+sine_tb.u0._49a
+sine_tb.u0._45a
+sine_tb.u0._48b
+@29
+sine_tb.u0.wavegen.time_to_change
+[pattern_trace] 1
+[pattern_trace] 0
