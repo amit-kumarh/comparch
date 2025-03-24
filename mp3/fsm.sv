@@ -18,7 +18,7 @@ module fsm #(
 
   state_t current_state, next_state;
   logic [6:0] addr, next_addr;
-  logic [6:0] counter, next_counter;
+  logic [6:0] counter;
   logic [8:0] mem_out;
 
   initial begin
@@ -43,11 +43,9 @@ module fsm #(
 
   always_comb begin
     next_state = current_state;
-    next_addr = addr;
-    next_counter = counter + 1;
+    next_addr  = addr;
 
     if (counter == MEM_SIZE - 1) begin
-      next_counter = 0;
       case (current_state)
         SINE_1: begin
           next_state = SINE_2;
@@ -79,11 +77,12 @@ module fsm #(
     end
   end
 
-  always_ff @(posedge clk) begin
+  always_comb begin
     case (current_state)
-      SINE_1, SINE_2: out <= mem_out + 512;
-      SINE_3, SINE_4: out <= 512 - mem_out;
-      default: out <= 0;
+      SINE_1, SINE_2: out = mem_out + 512;
+      SINE_3, SINE_4: out = 512 - mem_out;
+      default: out = 0;
     endcase
   end
+
 endmodule
